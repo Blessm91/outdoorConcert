@@ -25,7 +25,7 @@ def print_seating_chart(seating):
 
 
 def purchase_ticket(seating, row, col):
-    """Purchases a ticket at the specified row and column, enforcing social distancing in the row."""
+    """Purchases a ticket at the specified row and column, enforcing social distancing in the row and between rows."""
     if seating[row][col] != AVAILABLE_SEAT:
         print("Seat is already occupied. Please choose another seat.")
         return
@@ -44,6 +44,14 @@ def purchase_ticket(seating, row, col):
         seating[row][col + 1] = " "  # Block seat
     if col + 2 < N_COL:
         seating[row][col + 2] = " "  # Block seat
+
+    # Enforce one row distance above
+    if row - 1 >= 0:
+        seating[row - 1] = [" " if seat == AVAILABLE_SEAT else seat for seat in seating[row - 1]]
+
+    # Enforce one row distance below
+    if row + 1 < N_ROW:
+        seating[row + 1] = [" " if seat == AVAILABLE_SEAT else seat for seat in seating[row + 1]]
 
     print(f"Ticket purchased at row {row + 1}, column {col + 1}.")
 
