@@ -4,25 +4,22 @@ The matrix is populated with "A" since all seats are available and "X" for sold 
 The code also includes a function to print the seating chart and a function to sell tickets.
 """
 
-# out test matrix has 4 rows and 10 columns
+# Constants for seating dimensions and seat states
 N_ROW = 4
 N_COL = 10
+AVAILABLE_SEAT = 'A'
+SOLD_SEAT = 'X'
 
-# available seats are represented by 'A' and sold seats by 'X'
-available_seat = 'A'
-sold_seat = 'X'
+def create_seating(rows, cols, available_seat):
+    """Creates a seating chart with all seats available."""
+    return [[available_seat for _ in range(cols)] for _ in range(rows)]
 
-# create some available seating
-seating = []
-for r in range(N_ROW):
-    row = []
-    for c in range(N_COL):
-        row.append(available_seat)
-    seating.append(row)
+def print_seating_chart(seating):
+    """Prints the seating chart."""
+    print("Seating Chart:")
+    for r, row in enumerate(seating, start=1):
+        print(f"{r}\t" + " ".join(row))
 
-# function to print the seating chart
-for r in range(N_ROW):
-    print(r+1, end="\t")
-    for c in range(N_COL):
-        print(seating[r][c], end=" ")
-    print()
+# Main logic
+seating = create_seating(N_ROW, N_COL, AVAILABLE_SEAT)
+print_seating_chart(seating)
