@@ -45,7 +45,7 @@ def purchase_ticket(seating, row, col):
     if col + 2 < N_COL:
         seating[row][col + 2] = " "  # Block seat
 
-    # Enforce one row distance above
+# Enforce one row distance above
     if row - 1 >= 0:
         seating[row - 1] = [" " if seat == AVAILABLE_SEAT else seat for seat in seating[row - 1]]
 
@@ -80,22 +80,41 @@ def menu(seating):
     while True:
         print("Menu:")
         print("[V] View/display available seating")
-        print("[P] Purchase a ticket")
+        print("[P] Purchase tickets")
         print("[Q] Quit")
         choice = input("Enter your choice: ").strip().upper()
 
         if choice == "V":
             print_seating_chart(seating)
         elif choice == "P":
-            try:
-                row = int(input("Enter the row number (1-4): ")) - 1
-                col = int(input("Enter the column number (1-10): ")) - 1
-                if 0 <= row < N_ROW and 0 <= col < N_COL:
-                    purchase_ticket(seating, row, col)
-                else:
-                    print("Invalid row or column. Please try again.")
-            except ValueError:
-                print("Invalid input. Please enter valid numbers.")
+            print("Purchase Options:")
+            print("[ST] Single ticket")
+            print("[BT] Bulk tickets")
+            sub_choice = input("Enter your choice: ").strip().upper()
+
+            if sub_choice == "ST":
+                try:
+                    row = int(input("Enter the row number (1-4): ")) - 1
+                    col = int(input("Enter the column number (1-10): ")) - 1
+                    if 0 <= row < N_ROW and 0 <= col < N_COL:
+                        purchase_ticket(seating, row, col)
+                    else:
+                        print("Invalid row or column. Please try again.")
+                except ValueError:
+                    print("Invalid input. Please enter valid numbers.")
+            elif sub_choice == "BT":
+                try:
+                    row = int(input("Enter the row number (1-4): ")) - 1
+                    start_col = int(input("Enter the starting column number (1-10): ")) - 1
+                    num_tickets = int(input("Enter the number of tickets to purchase: "))
+                    if 0 <= row < N_ROW and 0 <= start_col < N_COL and num_tickets > 0:
+                        purchase_bulk_tickets(seating, row, start_col, num_tickets)
+                    else:
+                        print("Invalid input. Please try again.")
+                except ValueError:
+                    print("Invalid input. Please enter valid numbers.")
+            else:
+                print("Invalid choice. Please try again.")
         elif choice == "Q":
             print("Exiting the program. Goodbye!")
             break
