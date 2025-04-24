@@ -56,6 +56,25 @@ def purchase_ticket(seating, row, col):
     print(f"Ticket purchased at row {row + 1}, column {col + 1}.")
 
 
+def purchase_bulk_tickets(seating, row, start_col, num_tickets):
+    """Purchases bulk tickets in the specified row, allowing adjacent seats."""
+    if start_col + num_tickets > N_COL:
+        print("Not enough seats available in this row for the bulk purchase.")
+        return
+
+    # Check if all seats in the range are available
+    for col in range(start_col, start_col + num_tickets):
+        if seating[row][col] != AVAILABLE_SEAT:
+            print("One or more seats in the selected range are not available. Please choose another range.")
+            return
+
+    # Mark the selected seats as sold
+    for col in range(start_col, start_col + num_tickets):
+        seating[row][col] = SOLD_SEAT
+
+    print(f"Bulk tickets purchased at row {row + 1}, columns {start_col + 1} to {start_col + num_tickets}.")
+
+
 def menu(seating):
     """Displays a menu system for guests."""
     while True:
