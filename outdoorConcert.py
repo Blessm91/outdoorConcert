@@ -69,7 +69,17 @@ def purchase_ticket(seating, row, col):
     if row + 1 < N_ROW:
         seating[row + 1] = [" " if seat == AVAILABLE_SEAT else seat for seat in seating[row + 1]]
 
-    print(f"Ticket purchased at row {row + 1}, column {col + 1}. Price: ${price}")
+    # Calculate total cost
+    tax = price * STATE_TAX_RATE
+    total_cost = price + tax + MASK_FEE
+
+    # Print receipt
+    print("\nReceipt:")
+    print(f"Row: {row + 1}, Column: {col + 1}")
+    print(f"Base Price: ${price:.2f}")
+    print(f"State Tax (7.25%): ${tax:.2f}")
+    print(f"Mandatory Mask Fee: ${MASK_FEE:.2f}")
+    print(f"Total Cost: ${total_cost:.2f}\n")
 
 
 def purchase_bulk_tickets(seating, row, start_col, num_tickets):
