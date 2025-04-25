@@ -1,3 +1,6 @@
+import os
+import json
+
 """
 This example code creates a 2D list (2D matrix) that can store seating.
 The matrix is populated with "a" since all seats are available and "X" for sold seats.
@@ -14,6 +17,9 @@ MIDDLE_SEAT_PRICE = 50
 BACK_SEAT_PRICE = 25
 STATE_TAX_RATE = 0.0725
 MASK_FEE = 5.00
+
+SEATING_FILE = "seating.json"
+PURCHASES_FILE = "purchases.json"
 
 purchases = {}  # Dictionary to store user purchases
 
@@ -187,6 +193,38 @@ def display_all_purchases():
     print(f"\nTotal Income: ${total_income:.2f}")
 
 
+def save_data(seating, purchases):
+    """Saves seating and purchase data to .json files."""
+    with open(SEATING_FILE, "w") as seating_file:
+        json.dump(seating, seating_file)
+    with open(PURCHASES_FILE, "w") as purchases_file:
+        json.dump(purchases, purchases_file)
+    print("Data saved successfully.")
+
+
+def load_data():
+    """Loads seating and purchase data from .json files or creates default files if they do not exist."""
+    if not os.path.exists(SEATING_FILE) or not os.path.exists(PURCHASES_FILE):
+        print("No saved data found. Creating default files...")
+        seating = create_seating(N_ROW, N_COL, AVAILABLE_SEAT)
+        purchases = {}
+        save_data(seating, purchases)  # Create default files
+        return seating, purchases
+
+    try:
+        with open(SEATING_FILE, "r") as seating_file:
+            seating = json.load(seating_file)
+        with open(PURCHASES_FILE, "r") as purchases_file:
+            purchases = json.load(purchases_file)
+        print("Data loaded successfully.")
+        return seating, purchases
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        seating = create_seating(N_ROW, N_COL, AVAILABLE_SEAT)
+        purchases = {}
+        return seating, purchases
+
+
 def menu(seating):
     """Displays a menu system for guests."""
     while True:
@@ -209,9 +247,10 @@ def menu(seating):
             if sub_choice == "ST":
                 try:
                     row = int(input("Enter the row number (1-20): ")) - 1
-                    col = int(input("Enter the column number (1-10): ")) - 1
+                    col = int(input("Enter the column number (1-26): ")) - 1
                     if 0 <= row < N_ROW and 0 <= col < N_COL:
                         purchase_ticket(seating, row, col)
+                        save_data(seating, purchases)  # Save data after each transaction
                     else:
                         print("Invalid row or column. Please try again.")
                 except ValueError:
@@ -219,10 +258,11 @@ def menu(seating):
             elif sub_choice == "BT":
                 try:
                     row = int(input("Enter the row number (1-20): ")) - 1
-                    start_col = int(input("Enter the starting column number (1-10): ")) - 1
+                    start_col = int(input("Enter the starting column number (1-26): ")) - 1
                     num_tickets = int(input("Enter the number of tickets to purchase: "))
                     if 0 <= row < N_ROW and 0 <= start_col < N_COL and start_col + num_tickets <= N_COL:
                         purchase_bulk_tickets(seating, row, start_col, num_tickets)
+                        save_data(seating, purchases)  # Save data after each transaction
                     else:
                         print("Invalid input. Please try again.")
                 except ValueError:
@@ -234,6 +274,7 @@ def menu(seating):
         elif choice == "D":
             display_all_purchases()
         elif choice == "Q":
+            save_data(seating, purchases)  # Save data before quitting
             print("Exiting the program. Goodbye!")
             break
         else:
@@ -241,5 +282,5 @@ def menu(seating):
 
 
 # Main logic
-seating = create_seating(N_ROW, N_COL, AVAILABLE_SEAT)
+seating, purchases = load_data()
 menu(seating)
