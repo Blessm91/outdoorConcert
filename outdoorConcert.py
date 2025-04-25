@@ -227,6 +227,7 @@ def load_data():
 
 def menu(seating):
     """Displays a menu system for guests."""
+    print("Welcome to Concert Guru! How can I help you today?")  # Add welcome message
     while True:
         print("Menu:")
         print("[V] View/display available seating")
@@ -275,7 +276,7 @@ def menu(seating):
             display_all_purchases()
         elif choice == "Q":
             save_data(seating, purchases)  # Save data before quitting
-            print("Exiting the program. Goodbye!")
+            print("Concert Guru says Goodbye!")
             break
         else:
             print("Invalid choice. Please try again.")
