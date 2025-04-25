@@ -32,9 +32,7 @@ def create_seating(rows, cols, available_seat):
 def print_seating_chart(seating):
     """Prints the seating chart with rows labeled by numbers and columns labeled by letters."""
     # Generate column labels (A, B, C, ...)
-    column_labels = "   " + " ".join(
-        chr(65 + i) for i in range(len(seating[0]))
-    )  # A, B, C, ...
+    column_labels = "   " + " ".join(chr(65 + i) for i in range(len(seating[0])))  # A, B, C, ...
     print("\nSeating Chart:")
     print(column_labels)  # Print column labels
 
@@ -82,15 +80,11 @@ def purchase_ticket(seating, row, col):
 
     # Enforce one row distance above
     if row - 1 >= 0:
-        seating[row - 1] = [
-            " " if seat == AVAILABLE_SEAT else seat for seat in seating[row - 1]
-        ]
+        seating[row - 1] = [" " if seat == AVAILABLE_SEAT else seat for seat in seating[row - 1]]
 
     # Enforce one row distance below
     if row + 1 < N_ROW:
-        seating[row + 1] = [
-            " " if seat == AVAILABLE_SEAT else seat for seat in seating[row + 1]
-        ]
+        seating[row + 1] = [" " if seat == AVAILABLE_SEAT else seat for seat in seating[row + 1]]
 
     # Record the purchase
     ticket_info = f"Row {row + 1}, Column {col + 1}, Price: ${price:.2f}"
@@ -127,9 +121,7 @@ def purchase_bulk_tickets(seating, row, start_col, num_tickets):
     # Check if all seats in the range are available
     for col in range(start_col, start_col + num_tickets):
         if seating[row][col] != AVAILABLE_SEAT:
-            print(
-                "One or more seats in the selected range are not available. Please choose another range."
-            )
+            print("One or more seats in the selected range are not available. Please choose another range.")
             return
 
     # Determine the price based on the row
@@ -237,6 +229,16 @@ def menu(seating):
     """Displays a menu system for guests."""
     print("Welcome to Concert Guru! How can I help you today?")  # Add welcome message
     while True:
+        # Display ticket pricing options in a box
+        print("\n+-----------------------------------+")
+        print("|          Ticket Pricing           |")
+        print("+-----------------------------------+")
+        print(f"| Front Seats (Rows 1-5):   ${FRONT_SEAT_PRICE:>5} |")
+        print(f"| Middle Seats (Rows 6-11): ${MIDDLE_SEAT_PRICE:>5} |")
+        print(f"| Back Seats (Rows 12-20):  ${BACK_SEAT_PRICE:>5} |")
+        print("+-----------------------------------+\n")
+
+        # Display menu options
         print("Menu:")
         print("[V] View/display available seating")
         print("[P] Purchase tickets")
@@ -259,9 +261,7 @@ def menu(seating):
                     col = int(input("Enter the column number (1-26): ")) - 1
                     if 0 <= row < N_ROW and 0 <= col < N_COL:
                         purchase_ticket(seating, row, col)
-                        save_data(
-                            seating, purchases
-                        )  # Save data after each transaction
+                        save_data(seating, purchases)  # Save data after each transaction
                     else:
                         print("Invalid row or column. Please try again.")
                 except ValueError:
@@ -269,21 +269,11 @@ def menu(seating):
             elif sub_choice == "BT":
                 try:
                     row = int(input("Enter the row number (1-20): ")) - 1
-                    start_col = (
-                        int(input("Enter the starting column number (1-26): ")) - 1
-                    )
-                    num_tickets = int(
-                        input("Enter the number of tickets to purchase: ")
-                    )
-                    if (
-                        0 <= row < N_ROW
-                        and 0 <= start_col < N_COL
-                        and start_col + num_tickets <= N_COL
-                    ):
+                    start_col = int(input("Enter the starting column number (1-26): ")) - 1
+                    num_tickets = int(input("Enter the number of tickets to purchase: "))
+                    if 0 <= row < N_ROW and 0 <= start_col < N_COL and start_col + num_tickets <= N_COL:
                         purchase_bulk_tickets(seating, row, start_col, num_tickets)
-                        save_data(
-                            seating, purchases
-                        )  # Save data after each transaction
+                        save_data(seating, purchases)  # Save data after each transaction
                     else:
                         print("Invalid input. Please try again.")
                 except ValueError:
