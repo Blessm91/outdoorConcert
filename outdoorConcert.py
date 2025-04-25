@@ -5,8 +5,8 @@ The code includes a menu system for guests to view the seating chart.
 """
 
 # Constants for seating dimensions and seat states
-N_ROW = 4
-N_COL = 10
+N_ROW = 20  # Number of rows
+N_COL = 26  # Number of columns
 AVAILABLE_SEAT = "a"
 SOLD_SEAT = "X"
 FRONT_SEAT_PRICE = 80
@@ -221,7 +221,7 @@ def menu(seating):
                     row = int(input("Enter the row number (1-20): ")) - 1
                     start_col = int(input("Enter the starting column number (1-10): ")) - 1
                     num_tickets = int(input("Enter the number of tickets to purchase: "))
-                    if 0 <= row < N_ROW and 0 <= start_col < N_COL and num_tickets > 0:
+                    if 0 <= row < N_ROW and 0 <= start_col < N_COL and start_col + num_tickets <= N_COL:
                         purchase_bulk_tickets(seating, row, start_col, num_tickets)
                     else:
                         print("Invalid input. Please try again.")
