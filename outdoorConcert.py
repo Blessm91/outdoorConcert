@@ -35,6 +35,10 @@ def purchase_ticket(seating, row, col):
         print("Seat is already occupied. Please choose another seat.")
         return
 
+    # Ask for user details
+    name = input("Enter your name: ").strip()
+    email = input("Enter your email address: ").strip()
+
     # Determine the price based on the row
     if 0 <= row <= 4:
         price = FRONT_SEAT_PRICE
@@ -75,6 +79,8 @@ def purchase_ticket(seating, row, col):
 
     # Print receipt
     print("\nReceipt:")
+    print(f"Name: {name}")
+    print(f"Email: {email}")
     print(f"Row: {row + 1}, Column: {col + 1}")
     print(f"Base Price: ${price:.2f}")
     print(f"State Tax (7.25%): ${tax:.2f}")
