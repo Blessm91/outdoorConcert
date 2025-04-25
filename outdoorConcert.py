@@ -238,6 +238,11 @@ def menu(seating):
         print(f"| Back Seats (Rows 12-20):  ${BACK_SEAT_PRICE:>5} |")
         print("+-----------------------------------+")
         print("| * A $5 mandatory mask fee applies |")
+        print("+-----------------------------------+")
+        print("| * Social distancing enforced:     |")
+        print("|   - Single tickets: 2 seats left  |")
+        print("|     and right, 1 row above/below  |")
+        print("|   - Bulk tickets: Adjacent seats  |")
         print("+-----------------------------------+\n")
 
         # Display menu options
