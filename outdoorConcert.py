@@ -203,7 +203,10 @@ def display_all_purchases():
             print(f"- {ticket}")
             # Extract the price from the ticket string and add to total income
             price_start = ticket.rfind("$") + 1
-            total_income += float(ticket[price_start:])
+            price_end = ticket.find(" ", price_start)  # Find the end of the price
+            if price_end == -1:  # Handle single tickets without "each"
+                price_end = len(ticket)
+            total_income += float(ticket[price_start:price_end])
 
     print(f"\nTotal Income: ${total_income:.2f}")
 
