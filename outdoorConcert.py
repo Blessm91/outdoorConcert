@@ -46,9 +46,7 @@ def print_seating_chart(seating):
 
 def purchase_ticket(seating, row, col_letter):
     """Purchases a ticket at the specified row and column, enforcing social distancing."""
-    col = (
-        ord(col_letter.upper()) - 65
-    )  # Convert column letter to index (A=0, B=1, ..., Z=25)
+    col = ord(col_letter.upper()) - 65  # Convert column letter to index (A=0, B=1, ..., Z=25)
     if col < 0 or col >= N_COL:
         print("Invalid column. Please enter a letter between A and Z.")
         return
@@ -121,10 +119,11 @@ def purchase_ticket(seating, row, col_letter):
     print(f"Total Cost: ${total_cost:.2f}\n")
 
 
-def purchase_bulk_tickets(seating, row, start_col, num_tickets):
+def purchase_bulk_tickets(seating, row, start_col_letter, num_tickets):
     """Purchases bulk tickets in the specified row, allowing adjacent seats."""
-    if start_col + num_tickets > N_COL:
-        print("Not enough seats available in this row for the bulk purchase.")
+    start_col = ord(start_col_letter.upper()) - 65  # Convert column letter to index
+    if start_col < 0 or start_col >= N_COL or start_col + num_tickets > N_COL:
+        print("Invalid column range. Please enter a valid starting column letter.")
         return
 
     # Ask for user details
@@ -155,7 +154,8 @@ def purchase_bulk_tickets(seating, row, start_col, num_tickets):
         seating[row][col] = SOLD_SEAT
 
     # Record the purchase
-    ticket_info = f"Row {row + 1}, Columns {start_col + 1} to {start_col + num_tickets}, Price: ${price:.2f} each"
+    end_col_letter = chr(start_col + num_tickets - 1 + 65)  # Convert index back to letter
+    ticket_info = f"Row {row + 1}, Columns {start_col_letter.upper()} to {end_col_letter}, Price: ${price:.2f} each"
     if name in purchases:
         purchases[name].append(ticket_info)
     else:
@@ -169,7 +169,7 @@ def purchase_bulk_tickets(seating, row, start_col, num_tickets):
     print("\nReceipt:")
     print(f"Name: {name}")
     print(f"Email: {email}")
-    print(f"Row: {row + 1}, Columns: {start_col + 1} to {start_col + num_tickets}")
+    print(f"Row: {row + 1}, Columns: {start_col_letter.upper()} to {end_col_letter}")
     print(f"Base Price (per ticket): ${price:.2f}")
     print(f"Number of Tickets: {num_tickets}")
     print(f"State Tax (7.25%): ${tax:.2f}")
@@ -283,14 +283,8 @@ def menu(seating):
             if sub_choice == "ST":
                 try:
                     row = int(input("Enter the row number (1-20): ")) - 1
-                    col_letter = (
-                        input("Enter the column letter (A-Z): ").strip().upper()
-                    )
-                    if (
-                        0 <= row < N_ROW
-                        and col_letter.isalpha()
-                        and len(col_letter) == 1
-                    ):
+                    col_letter = input("Enter the column letter (A-Z): ").strip().upper()
+                    if 0 <= row < N_ROW and col_letter.isalpha() and len(col_letter) == 1:
                         purchase_ticket(seating, row, col_letter)
                         save_data(
                             seating, purchases
@@ -302,25 +296,15 @@ def menu(seating):
             elif sub_choice == "BT":
                 try:
                     row = int(input("Enter the row number (1-20): ")) - 1
-                    start_col = (
-                        int(input("Enter the starting column number (1-26): ")) - 1
-                    )
-                    num_tickets = int(
-                        input("Enter the number of tickets to purchase: ")
-                    )
-                    if (
-                        0 <= row < N_ROW
-                        and 0 <= start_col < N_COL
-                        and start_col + num_tickets <= N_COL
-                    ):
-                        purchase_bulk_tickets(seating, row, start_col, num_tickets)
-                        save_data(
-                            seating, purchases
-                        )  # Save data after each transaction
+                    start_col_letter = input("Enter the starting column letter (A-Z): ").strip().upper()
+                    num_tickets = int(input("Enter the number of tickets to purchase: "))
+                    if 0 <= row < N_ROW and start_col_letter.isalpha() and len(start_col_letter) == 1:
+                        purchase_bulk_tickets(seating, row, start_col_letter, num_tickets)
+                        save_data(seating, purchases)  # Save data after each transaction
                     else:
-                        print("Invalid input. Please try again.")
+                        print("Invalid row or column. Please try again.")
                 except ValueError:
-                    print("Invalid input. Please enter valid numbers.")
+                    print("Invalid input. Please enter valid numbers and letters.")
             else:
                 print("Invalid choice. Please try again.")
         elif choice == "S":
