@@ -9,6 +9,7 @@ N_ROW = 4
 N_COL = 10
 AVAILABLE_SEAT = "a"
 SOLD_SEAT = "X"
+FRONT_SEAT_PRICE = 80
 
 
 def create_seating(rows, cols, available_seat):
