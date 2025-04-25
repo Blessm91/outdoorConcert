@@ -24,10 +24,15 @@ def create_seating(rows, cols, available_seat):
 
 
 def print_seating_chart(seating):
-    """Prints the seating chart."""
+    """Prints the seating chart with rows labeled by numbers and columns labeled by letters."""
+    # Generate column labels (A, B, C, ...)
+    column_labels = "   " + " ".join(chr(65 + i) for i in range(len(seating[0])))  # A, B, C, ...
     print("\nSeating Chart:")
+    print(column_labels)  # Print column labels
+
+    # Print each row with its row number
     for r, row in enumerate(seating, start=1):
-        print(f"{r}\t" + " ".join(row))
+        print(f"{r:2} " + " ".join(row))  # Row number followed by seats
     print()
 
 
@@ -162,6 +167,26 @@ def search_by_name():
         print(f"No tickets found for {name}.")
 
 
+def display_all_purchases():
+    """Displays all purchases made by all users and calculates total income."""
+    if not purchases:
+        print("No purchases have been made yet.")
+        return
+
+    total_income = 0  # Variable to track total income
+
+    print("\nAll Purchases:")
+    for name, tickets in purchases.items():
+        print(f"\n{name}:")
+        for ticket in tickets:
+            print(f"- {ticket}")
+            # Extract the price from the ticket string and add to total income
+            price_start = ticket.rfind("$") + 1
+            total_income += float(ticket[price_start:])
+
+    print(f"\nTotal Income: ${total_income:.2f}")
+
+
 def menu(seating):
     """Displays a menu system for guests."""
     while True:
@@ -169,6 +194,7 @@ def menu(seating):
         print("[V] View/display available seating")
         print("[P] Purchase tickets")
         print("[S] Search by name")
+        print("[D] Display all purchases")
         print("[Q] Quit")
         choice = input("Enter your choice: ").strip().upper()
 
@@ -205,6 +231,8 @@ def menu(seating):
                 print("Invalid choice. Please try again.")
         elif choice == "S":
             search_by_name()
+        elif choice == "D":
+            display_all_purchases()
         elif choice == "Q":
             print("Exiting the program. Goodbye!")
             break
