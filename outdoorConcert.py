@@ -44,8 +44,13 @@ def print_seating_chart(seating):
     print()
 
 
-def purchase_ticket(seating, row, col):
-    """Purchases a ticket at the specified row and column, enforcing social distancing in the row and between rows."""
+def purchase_ticket(seating, row, col_letter):
+    """Purchases a ticket at the specified row and column, enforcing social distancing."""
+    col = ord(col_letter.upper()) - 65  # Convert column letter to index (A=0, B=1, ..., Z=25)
+    if col < 0 or col >= N_COL:
+        print("Invalid column. Please enter a letter between A and Z.")
+        return
+
     if seating[row][col] != AVAILABLE_SEAT:
         print("Seat is already occupied. Please choose another seat.")
         return
@@ -93,7 +98,7 @@ def purchase_ticket(seating, row, col):
         ]
 
     # Record the purchase
-    ticket_info = f"Row {row + 1}, Column {col + 1}, Price: ${price:.2f}"
+    ticket_info = f"Row {row + 1}, Column {col_letter.upper()}, Price: ${price:.2f}"
     if name in purchases:
         purchases[name].append(ticket_info)
     else:
@@ -107,7 +112,7 @@ def purchase_ticket(seating, row, col):
     print("\nReceipt:")
     print(f"Name: {name}")
     print(f"Email: {email}")
-    print(f"Row: {row + 1}, Column: {col + 1}")
+    print(f"Row: {row + 1}, Column: {col_letter.upper()}")
     print(f"Base Price: ${price:.2f}")
     print(f"State Tax (7.25%): ${tax:.2f}")
     print(f"Mandatory Mask Fee: ${MASK_FEE:.2f}")
@@ -276,9 +281,9 @@ def menu(seating):
             if sub_choice == "ST":
                 try:
                     row = int(input("Enter the row number (1-20): ")) - 1
-                    col = int(input("Enter the column number (1-26): ")) - 1
-                    if 0 <= row < N_ROW and 0 <= col < N_COL:
-                        purchase_ticket(seating, row, col)
+                    col_letter = input("Enter the column letter (A-Z): ").strip().upper()
+                    if 0 <= row < N_ROW and col_letter.isalpha() and len(col_letter) == 1:
+                        purchase_ticket(seating, row, col_letter)
                         save_data(
                             seating, purchases
                         )  # Save data after each transaction
