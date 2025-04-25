@@ -15,6 +15,8 @@ BACK_SEAT_PRICE = 25
 STATE_TAX_RATE = 0.0725
 MASK_FEE = 5.00
 
+purchases = {}  # Dictionary to store user purchases
+
 
 def create_seating(rows, cols, available_seat):
     """Creates a seating chart with all seats available."""
@@ -67,15 +69,18 @@ def purchase_ticket(seating, row, col):
 
     # Enforce one row distance above
     if row - 1 >= 0:
-        seating[row - 1] = [
-            " " if seat == AVAILABLE_SEAT else seat for seat in seating[row - 1]
-        ]
+        seating[row - 1] = [" " if seat == AVAILABLE_SEAT else seat for seat in seating[row - 1]]
 
     # Enforce one row distance below
     if row + 1 < N_ROW:
-        seating[row + 1] = [
-            " " if seat == AVAILABLE_SEAT else seat for seat in seating[row + 1]
-        ]
+        seating[row + 1] = [" " if seat == AVAILABLE_SEAT else seat for seat in seating[row + 1]]
+
+    # Record the purchase
+    ticket_info = f"Row {row + 1}, Column {col + 1}, Price: ${price:.2f}"
+    if name in purchases:
+        purchases[name].append(ticket_info)
+    else:
+        purchases[name] = [ticket_info]
 
     # Calculate total cost
     tax = price * STATE_TAX_RATE
@@ -105,9 +110,7 @@ def purchase_bulk_tickets(seating, row, start_col, num_tickets):
     # Check if all seats in the range are available
     for col in range(start_col, start_col + num_tickets):
         if seating[row][col] != AVAILABLE_SEAT:
-            print(
-                "One or more seats in the selected range are not available. Please choose another range."
-            )
+            print("One or more seats in the selected range are not available. Please choose another range.")
             return
 
     # Determine the price based on the row
@@ -125,6 +128,13 @@ def purchase_bulk_tickets(seating, row, start_col, num_tickets):
     for col in range(start_col, start_col + num_tickets):
         seating[row][col] = SOLD_SEAT
 
+    # Record the purchase
+    ticket_info = f"Row {row + 1}, Columns {start_col + 1} to {start_col + num_tickets}, Price: ${price:.2f} each"
+    if name in purchases:
+        purchases[name].append(ticket_info)
+    else:
+        purchases[name] = [ticket_info]
+
     # Calculate total cost
     tax = price * STATE_TAX_RATE * num_tickets
     total_cost = (price * num_tickets) + tax + (MASK_FEE * num_tickets)
@@ -141,12 +151,24 @@ def purchase_bulk_tickets(seating, row, start_col, num_tickets):
     print(f"Total Cost: ${total_cost:.2f}\n")
 
 
+def search_by_name():
+    """Searches for tickets purchased by a user with a specific name."""
+    name = input("Enter the name to search for: ").strip()
+    if name in purchases:
+        print(f"\nTickets purchased by {name}:")
+        for ticket in purchases[name]:
+            print(f"- {ticket}")
+    else:
+        print(f"No tickets found for {name}.")
+
+
 def menu(seating):
     """Displays a menu system for guests."""
     while True:
         print("Menu:")
         print("[V] View/display available seating")
         print("[P] Purchase tickets")
+        print("[S] Search by name")
         print("[Q] Quit")
         choice = input("Enter your choice: ").strip().upper()
 
@@ -160,7 +182,7 @@ def menu(seating):
 
             if sub_choice == "ST":
                 try:
-                    row = int(input("Enter the row number (1-4): ")) - 1
+                    row = int(input("Enter the row number (1-20): ")) - 1
                     col = int(input("Enter the column number (1-10): ")) - 1
                     if 0 <= row < N_ROW and 0 <= col < N_COL:
                         purchase_ticket(seating, row, col)
@@ -170,13 +192,9 @@ def menu(seating):
                     print("Invalid input. Please enter valid numbers.")
             elif sub_choice == "BT":
                 try:
-                    row = int(input("Enter the row number (1-4): ")) - 1
-                    start_col = (
-                        int(input("Enter the starting column number (1-10): ")) - 1
-                    )
-                    num_tickets = int(
-                        input("Enter the number of tickets to purchase: ")
-                    )
+                    row = int(input("Enter the row number (1-20): ")) - 1
+                    start_col = int(input("Enter the starting column number (1-10): ")) - 1
+                    num_tickets = int(input("Enter the number of tickets to purchase: "))
                     if 0 <= row < N_ROW and 0 <= start_col < N_COL and num_tickets > 0:
                         purchase_bulk_tickets(seating, row, start_col, num_tickets)
                     else:
@@ -185,6 +203,8 @@ def menu(seating):
                     print("Invalid input. Please enter valid numbers.")
             else:
                 print("Invalid choice. Please try again.")
+        elif choice == "S":
+            search_by_name()
         elif choice == "Q":
             print("Exiting the program. Goodbye!")
             break
