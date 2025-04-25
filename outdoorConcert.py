@@ -31,6 +31,13 @@ def purchase_ticket(seating, row, col):
         print("Seat is already occupied. Please choose another seat.")
         return
 
+    # Determine the price based on the row
+    if 0 <= row <= 4:
+        price = FRONT_SEAT_PRICE
+    else:
+        print("Invalid row for Front Seat pricing.")
+        return
+
     # Mark the selected seat as sold
     seating[row][col] = SOLD_SEAT
 
@@ -46,7 +53,7 @@ def purchase_ticket(seating, row, col):
     if col + 2 < N_COL:
         seating[row][col + 2] = " "  # Block seat
 
-# Enforce one row distance above
+    # Enforce one row distance above
     if row - 1 >= 0:
         seating[row - 1] = [" " if seat == AVAILABLE_SEAT else seat for seat in seating[row - 1]]
 
@@ -54,7 +61,7 @@ def purchase_ticket(seating, row, col):
     if row + 1 < N_ROW:
         seating[row + 1] = [" " if seat == AVAILABLE_SEAT else seat for seat in seating[row + 1]]
 
-    print(f"Ticket purchased at row {row + 1}, column {col + 1}.")
+    print(f"Ticket purchased at row {row + 1}, column {col + 1}. Price: ${price}")
 
 
 def purchase_bulk_tickets(seating, row, start_col, num_tickets):
