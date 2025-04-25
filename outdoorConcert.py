@@ -76,11 +76,19 @@ def purchase_bulk_tickets(seating, row, start_col, num_tickets):
             print("One or more seats in the selected range are not available. Please choose another range.")
             return
 
+    # Determine the price based on the row
+    if 0 <= row <= 4:
+        price = FRONT_SEAT_PRICE
+    else:
+        print("Invalid row for Front Seat pricing.")
+        return
+
     # Mark the selected seats as sold
     for col in range(start_col, start_col + num_tickets):
         seating[row][col] = SOLD_SEAT
 
-    print(f"Bulk tickets purchased at row {row + 1}, columns {start_col + 1} to {start_col + num_tickets}.")
+    total_price = price * num_tickets
+    print(f"Bulk tickets purchased at row {row + 1}, columns {start_col + 1} to {start_col + num_tickets}. Total Price: ${total_price}")
 
 
 def menu(seating):
