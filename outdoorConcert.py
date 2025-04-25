@@ -12,6 +12,8 @@ SOLD_SEAT = "X"
 FRONT_SEAT_PRICE = 80
 MIDDLE_SEAT_PRICE = 50
 BACK_SEAT_PRICE = 25
+STATE_TAX_RATE = 0.0725
+MASK_FEE = 5.00
 
 
 def create_seating(rows, cols, available_seat):
