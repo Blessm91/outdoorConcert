@@ -10,6 +10,8 @@ N_COL = 10
 AVAILABLE_SEAT = "a"
 SOLD_SEAT = "X"
 FRONT_SEAT_PRICE = 80
+MIDDLE_SEAT_PRICE = 50
+BACK_SEAT_PRICE = 25
 
 
 def create_seating(rows, cols, available_seat):
@@ -34,8 +36,12 @@ def purchase_ticket(seating, row, col):
     # Determine the price based on the row
     if 0 <= row <= 4:
         price = FRONT_SEAT_PRICE
+    elif 5 <= row <= 10:
+        price = MIDDLE_SEAT_PRICE
+    elif 11 <= row <= 19:
+        price = BACK_SEAT_PRICE
     else:
-        print("Invalid row for Front Seat pricing.")
+        print("Invalid row for ticket pricing.")
         return
 
     # Mark the selected seat as sold
@@ -79,8 +85,12 @@ def purchase_bulk_tickets(seating, row, start_col, num_tickets):
     # Determine the price based on the row
     if 0 <= row <= 4:
         price = FRONT_SEAT_PRICE
+    elif 5 <= row <= 10:
+        price = MIDDLE_SEAT_PRICE
+    elif 11 <= row <= 19:
+        price = BACK_SEAT_PRICE
     else:
-        print("Invalid row for Front Seat pricing.")
+        print("Invalid row for ticket pricing.")
         return
 
     # Mark the selected seats as sold
