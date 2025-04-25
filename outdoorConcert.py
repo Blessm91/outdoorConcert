@@ -46,7 +46,9 @@ def print_seating_chart(seating):
 
 def purchase_ticket(seating, row, col_letter):
     """Purchases a ticket at the specified row and column, enforcing social distancing."""
-    col = ord(col_letter.upper()) - 65  # Convert column letter to index (A=0, B=1, ..., Z=25)
+    col = (
+        ord(col_letter.upper()) - 65
+    )  # Convert column letter to index (A=0, B=1, ..., Z=25)
     if col < 0 or col >= N_COL:
         print("Invalid column. Please enter a letter between A and Z.")
         return
@@ -281,8 +283,14 @@ def menu(seating):
             if sub_choice == "ST":
                 try:
                     row = int(input("Enter the row number (1-20): ")) - 1
-                    col_letter = input("Enter the column letter (A-Z): ").strip().upper()
-                    if 0 <= row < N_ROW and col_letter.isalpha() and len(col_letter) == 1:
+                    col_letter = (
+                        input("Enter the column letter (A-Z): ").strip().upper()
+                    )
+                    if (
+                        0 <= row < N_ROW
+                        and col_letter.isalpha()
+                        and len(col_letter) == 1
+                    ):
                         purchase_ticket(seating, row, col_letter)
                         save_data(
                             seating, purchases
