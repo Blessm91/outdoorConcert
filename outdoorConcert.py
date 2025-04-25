@@ -94,6 +94,10 @@ def purchase_bulk_tickets(seating, row, start_col, num_tickets):
         print("Not enough seats available in this row for the bulk purchase.")
         return
 
+    # Ask for user details
+    name = input("Enter your name: ").strip()
+    email = input("Enter your email address: ").strip()
+
     # Check if all seats in the range are available
     for col in range(start_col, start_col + num_tickets):
         if seating[row][col] != AVAILABLE_SEAT:
@@ -121,6 +125,8 @@ def purchase_bulk_tickets(seating, row, start_col, num_tickets):
 
     # Print receipt
     print("\nReceipt:")
+    print(f"Name: {name}")
+    print(f"Email: {email}")
     print(f"Row: {row + 1}, Columns: {start_col + 1} to {start_col + num_tickets}")
     print(f"Base Price (per ticket): ${price:.2f}")
     print(f"Number of Tickets: {num_tickets}")
