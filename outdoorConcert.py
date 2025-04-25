@@ -236,6 +236,8 @@ def menu(seating):
         print(f"| Front Seats (Rows 1-5):   ${FRONT_SEAT_PRICE:>5} |")
         print(f"| Middle Seats (Rows 6-11): ${MIDDLE_SEAT_PRICE:>5} |")
         print(f"| Back Seats (Rows 12-20):  ${BACK_SEAT_PRICE:>5} |")
+        print("+-----------------------------------+")
+        print("| * A $5 mandatory mask fee applies |")
         print("+-----------------------------------+\n")
 
         # Display menu options
